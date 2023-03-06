@@ -155,18 +155,23 @@ This challenge introduces 2 functions to swap tokens on Uniswap V2
 
 ### State variables
 
-1.
-2.
-3.
+1. Address of tokens (2 or 3) and the address of the router
+2. Set interfaces for tokens and router
 
 ### Function swapSingleHopExactAmountIn
 
-1.
-2.
-3.
-4.
+1. Transfer `amountIn` from `msg.sender`
+2. Approve `amountIn` to `router`
+3. Set the `path`
+4. Call `swapExactTokensFor Tokens` on IUniswapV2Router
 
 ### Function swapSingleHopExactAmountOut
+
+1. Transfer `amountInMax`from `msg.sender`
+2. Approve `amountInMax` to `router`
+3. Set the `path``
+4. Call `swapTokensForExactTokens` on IUniswapV2Router and store amount of WETH spent by Uniswap in amounts (uint[])
+5. Refund excess WETH to `msg.sender`. Amount of WETH spent by Uniswap is stored in amounts[0]
 
 ### Forking mainnet
 
