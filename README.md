@@ -11,7 +11,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Aboudoc/Uniswap-v2.git">
-    <img src="images/logo.png" alt="Logo" width="100" height="60">
+    <img src="images/logo.png" alt="Logo" width="100" height="80">
   </a>
 
 <h3 align="center">Uniswap V2</h3>
@@ -168,10 +168,43 @@ This challenge introduces 2 functions to swap tokens on Uniswap V2
 
 ### Function swapSingleHopExactAmountOut
 
-Giving the token and the amount of token put in, this function will calculate the amount out using the `price0Average` and `price1Average`
+### Forking mainnet
 
-1. The token must be token0 or token1
-2. Compute `amountOut`using `price0Average` and `amountIn` argument (.mul). We have to put it back to uint using a function called `decode144()`
+1. Setup hardhat.config
+2. Find a whale on etherscan
+
+`hardhat.config.js`
+
+```sh
+  networks: {
+        hardhat: {
+          forking: {
+            url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
+       },
+     },
+  }
+```
+
+`.env`
+
+```sh
+ALCHEMY_API_KEY=...
+```
+
+`terminal1`
+
+```sh
+ALCHEMY_API_KEY=...
+npx hardhat node --fork https://eth-mainnet.g.alchemy.com/v2/$ALCHEMY_API_KEY
+```
+
+`terminal2`
+
+```sh
+npx hardhat test --network localhost
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
