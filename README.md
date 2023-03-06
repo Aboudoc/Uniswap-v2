@@ -144,7 +144,7 @@ If you need testnet funds, use the [Alchemy testnet faucet](https://goerlifaucet
 ## Constant Product AMM
 
 Uniswap V2 is a Constant product AMM (automated market maker) <=> a decentralized exchange where 2 tokens are traded.
-You can find a deep overview of CPAMM in [this repo](https://github.com/Aboudoc/Constant-Product-AMM/blob/main/contracts/UniswapV2Twap.sol)
+You can find a deep overview of CPAMM in [this repo](https://github.com/Aboudoc/Constant-Product-AMM)
 
 ## Uniswap V2 Single Hop Swap
 
