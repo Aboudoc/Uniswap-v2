@@ -207,6 +207,29 @@ This function will swap `minimum` DAI to obtain a `specific amount` of CRV. It w
 
 ## Uniswap V2 Add and Remove Liquidity
 
+Deposit your tokens into an Uniswap V2 pool to earn trading fees.
+
+This is called adding liquidity.
+
+Remove liquidity to withdraw your tokens and claim your trading fees.
+
+### State variables
+
+1. Address of tokens and the addresses of the router and the factory
+2. Set interfaces for tokens and pair, router and factory
+
+### Constructor
+
+1. Setup pair (IERC20) by calling getPair on factory
+
+### Function
+
+This function adds liquidity to the Uniswap WETH - DAI pool.
+
+### Function
+
+This function removes liquidity from the Uniswap WETH - DAI pool.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Uniswap V2 Flash Swap

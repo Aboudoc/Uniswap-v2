@@ -3,6 +3,7 @@ pragma solidity ^0.8.17;
 
 import "./IERC20.sol";
 import "./IUniswapV2Router.sol";
+import "./IUniswapV2Factory.sol";
 
 contract UniswapV2MultiHopSwap {
     address private constant UNISWAP_V2_ROUTER =
@@ -28,6 +29,7 @@ contract UniswapV2MultiHopSwap {
         path[0] = DAI;
         path[1] = WETH;
         path[2] = CRV;
+
         router.swapExactTokensForTokens(
             amountIn,
             amountOutMin,
