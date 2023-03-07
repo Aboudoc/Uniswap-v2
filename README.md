@@ -148,7 +148,7 @@ You can find a deep overview of CPAMM in [this repo](https://github.com/Aboudoc/
 
 ## Uniswap V2 Single Hop Swap
 
-This challenge introduces 2 functions to swap tokens on Uniswap V2
+This contract introduces 2 functions to swap tokens on Uniswap V2
 
 `swapExactTokensForTokens` - Sell all of input token.
 `swapTokensForExactTokens` - Buy specific amount of output token.
@@ -173,7 +173,47 @@ This challenge introduces 2 functions to swap tokens on Uniswap V2
 4. Call `swapTokensForExactTokens` on IUniswapV2Router and store amount of WETH spent by Uniswap in amounts (uint[])
 5. Refund excess WETH to `msg.sender`. Amount of WETH spent by Uniswap is stored in amounts[0]
 
-### Forking mainnet
+## Uniswap V2 Multi Hop Swap
+
+Sell DAI and buy CRV.
+
+However there is no DAI - CRV pool, so we will execute multi hop swaps, DAI to WETH and then WETH to CRV.
+
+### State variables
+
+1. Address of tokens and the address of the router
+2. Set interfaces for tokens and router
+
+### Function swapMultiHopExactAmountIn
+
+This function will swap `all` of DAI for `maximum amount` of CRV. It will execute multi hop swaps from DAI to WETH and then WETH to CRV.
+
+1. Transfer `amountIn` from `msg.sender`
+2. Approve `amountIn` to `router`
+3. Setup the swapping `path`
+4. Send CRV to msg.sender
+
+### Function swapMultiHopExactAmountOut
+
+This function will swap `minimum` DAI to obtain a `specific amount` of CRV. It will execute multi hop swaps from DAI to WETH and then WETH to CRV.
+
+1. Transfer `amountInMax`from `msg.sender`
+2. Approve `amountInMax` to `router`
+3. Setup the swapping `path``
+4. Call `swapTokensForExactTokens` on IUniswapV2Router and store amount of DAI spent by Uniswap in amounts (uint[])
+5. Refund DAI to `msg.sender` if not all of DAI was spent. Amount of DAI spent by Uniswap is stored in amounts[0]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Uniswap V2 Add and Remove Liquidity
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Uniswap V2 Flash Swap
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Forking mainnet
 
 1. Setup hardhat.config
 2. Find a whale on etherscan
@@ -211,25 +251,11 @@ npx hardhat test --network localhost
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Uniswap V2 Multi Hop Swap
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Uniswap V2 Add and Remove Liquidity
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Uniswap V2 Flash Swap
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## Note
 
 This contract assumes that token0 and token1 both have same decimals
 
-Consider fees = 3%
+Consider Uniswap trading fee = 0.3%
 
 ### Further reading
 
