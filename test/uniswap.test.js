@@ -1,7 +1,7 @@
 // const { BigNumber } = require("@ethersproject/bignumber");
 const { assert } = require("chai");
 const { ethers } = require("hardhat");
-const { WETH_WHALE, WETH, DAI } = require("./config.js");
+const { WETH_WHALE, DAI_WHALE, WETH, DAI, CRV } = require("./config.js");
 
 describe("Uniswap v2 Single Hop Swap", function () {
   let TestSwapContract;
@@ -15,6 +15,7 @@ describe("Uniswap v2 Single Hop Swap", function () {
   });
 
   it("should swap", async () => {
+    //✅
     await hre.network.provider.request({
       method: "hardhat_impersonateAccount",
       params: [WETH_WHALE],
@@ -46,6 +47,10 @@ describe("Uniswap v2 Single Hop Swap", function () {
       ethers.utils.formatUnits(WETHHolderBalance.toString())
     );
 
+    console.log(
+      "-----------------------------SWAP-----------------------------"
+    );
+
     await TestSwapContract.connect(
       impersonateSigner
     ).swapSingleHopExactAmountIn(WETHHolderBalance, 1);
@@ -60,8 +65,87 @@ describe("Uniswap v2 Single Hop Swap", function () {
     const WETHHolderBalance_updated = await WETHContract.balanceOf(
       impersonateSigner.address
     );
-    // expect(WETHHolderBalance_updated.eq(BigNumber.from(0))).to.be.true;
-    // expect(DAIBalance_updated.gt(DAIHolderBalance)).to.be.true;
+    console.log(
+      `WETH Balance after Swap: ${ethers.utils.formatUnits(
+        WETHHolderBalance_updated.toString()
+      )}`
+    );
+
     assert.equal(WETHHolderBalance_updated.toString(), 0);
+  });
+});
+
+describe("Uniswap v2 Multi Hop Swap", function () {
+  let TestMultiSwapContract;
+
+  beforeEach(async () => {
+    const TestMultiSwapFactory = await ethers.getContractFactory(
+      "UniswapV2MultiHopSwap"
+    );
+    TestMultiSwapContract = await TestMultiSwapFactory.deploy();
+    await TestMultiSwapContract.deployed();
+  });
+
+  // change to DAI WHALE because we swap DAI to WETH to CRV
+  it("should Multiswap", async () => {
+    //✅
+    await hre.network.provider.request({
+      method: "hardhat_impersonateAccount",
+      params: [DAI_WHALE],
+    });
+    const impersonateSigner = await ethers.getSigner(DAI_WHALE);
+
+    const DAIContract = await ethers.getContractAt("IERC20", DAI);
+
+    const DAIHolderBalance = await DAIContract.balanceOf(
+      impersonateSigner.address
+    );
+
+    await DAIContract.connect(impersonateSigner).approve(
+      TestMultiSwapContract.address,
+      DAIHolderBalance
+    );
+
+    const CRVContract = await ethers.getContractAt("IERC20", CRV);
+
+    const CRVHolderBalance = await CRVContract.balanceOf(
+      impersonateSigner.address
+    );
+
+    console.log(
+      "Initial CRV Balance:",
+      ethers.utils.formatUnits(CRVHolderBalance.toString())
+    );
+
+    console.log(
+      "Initial DAI Balance:",
+      ethers.utils.formatUnits(DAIHolderBalance.toString())
+    );
+
+    console.log(
+      "-----------------------------SWAP-----------------------------"
+    );
+
+    await TestMultiSwapContract.connect(
+      impersonateSigner
+    ).swapMultiHopExactAmountIn(DAIHolderBalance, 1);
+
+    const crvBalance_updated = await CRVContract.balanceOf(
+      impersonateSigner.address
+    );
+    console.log(
+      "CRV Balance after Swap:",
+      ethers.utils.formatUnits(crvBalance_updated.toString())
+    );
+    const DAIHolderBalance_updated = await DAIContract.balanceOf(
+      impersonateSigner.address
+    );
+
+    console.log(
+      "DAI Balance after Swap:",
+      ethers.utils.formatUnits(DAIHolderBalance_updated.toString())
+    );
+
+    assert.equal(DAIHolderBalance_updated.toString(), 0);
   });
 });
