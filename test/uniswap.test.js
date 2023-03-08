@@ -1,8 +1,16 @@
 // const { BigNumber } = require("@ethersproject/bignumber");
 const { assert } = require("chai");
 const { ethers } = require("hardhat");
-const { WETH_WHALE, DAI_WHALE, WETH, DAI, CRV } = require("./config.js");
+const {
+  WETH_WHALE,
+  DAI_WHALE,
+  WETHDAI_WHALE,
+  WETH,
+  DAI,
+  CRV,
+} = require("./config.js");
 
+// Single Hop Swap
 describe("Uniswap v2 Single Hop Swap", function () {
   let TestSwapContract;
 
@@ -48,7 +56,7 @@ describe("Uniswap v2 Single Hop Swap", function () {
     );
 
     console.log(
-      "-----------------------------SWAP-----------------------------"
+      "-----------------------------SINGLE SWAP-----------------------------"
     );
 
     await TestSwapContract.connect(
@@ -75,6 +83,7 @@ describe("Uniswap v2 Single Hop Swap", function () {
   });
 });
 
+// Multi Hop Swap
 describe("Uniswap v2 Multi Hop Swap", function () {
   let TestMultiSwapContract;
 
@@ -86,7 +95,6 @@ describe("Uniswap v2 Multi Hop Swap", function () {
     await TestMultiSwapContract.deployed();
   });
 
-  // change to DAI WHALE because we swap DAI to WETH to CRV
   it("should Multiswap", async () => {
     //✅
     await hre.network.provider.request({
@@ -123,7 +131,7 @@ describe("Uniswap v2 Multi Hop Swap", function () {
     );
 
     console.log(
-      "-----------------------------SWAP-----------------------------"
+      "------------------------------MULTI SWAP------------------------------"
     );
 
     await TestMultiSwapContract.connect(
@@ -149,3 +157,111 @@ describe("Uniswap v2 Multi Hop Swap", function () {
     assert.equal(DAIHolderBalance_updated.toString(), 0);
   });
 });
+
+// Add Liquidity
+describe("Uniswap V2 Liquidity", function () {
+  let TestLiquidityContract;
+
+  beforeEach(async () => {
+    const TestLiquidityFactory = await ethers.getContractFactory(
+      "UniswapV2Liquidity"
+    );
+
+    TestLiquidityContract = await TestLiquidityFactory.deploy();
+    await TestLiquidityContract.deployed();
+  });
+  it("should add liquidity", async () => {
+    await hre.network.provider.request({
+      method: "hardhat_impersonateAccount",
+      params: [WETHDAI_WHALE],
+      // WETHDAI_WHALE holds WETH, DAI and ETH
+    });
+    const impersonateSigner = await ethers.getSigner(WETHDAI_WHALE);
+
+    const WETHContract = await ethers.getContractAt("IERC20", WETH);
+    const DAIContract = await ethers.getContractAt("IERC20", DAI);
+    const DAIBalanceBefore = await DAIContract.balanceOf(
+      impersonateSigner.address
+    );
+    const WETHBalanceBefore = await WETHContract.balanceOf(
+      impersonateSigner.address
+    );
+
+    await DAIContract.connect(impersonateSigner).approve(
+      TestLiquidityContract.address,
+      DAIBalanceBefore
+    );
+
+    await WETHContract.connect(impersonateSigner).approve(
+      TestLiquidityContract.address,
+      WETHBalanceBefore
+    );
+
+    console.log(
+      `WETH Balannce before adding liquidity: ${ethers.utils.formatUnits(
+        WETHBalanceBefore.toString()
+      )}`
+    );
+    console.log(
+      `DAI Balance before adding liquidity: ${ethers.utils.formatUnits(
+        DAIBalanceBefore.toString()
+      )}`
+    );
+
+    console.log(
+      "----------------------------ADD LIQUIDITY----------------------------"
+    );
+
+    await TestLiquidityContract.connect(impersonateSigner).addLiquidity(
+      WETHBalanceBefore,
+      DAIBalanceBefore
+    );
+
+    const WETHBalanceAfter = await WETHContract.balanceOf(
+      impersonateSigner.address
+    );
+    const DAIBalanceAfter = await DAIContract.balanceOf(
+      impersonateSigner.address
+    );
+
+    console.log(
+      `WETH Balance after adding Liquidity: ${ethers.utils.formatUnits(
+        WETHBalanceAfter.toString()
+      )}`
+    );
+
+    console.log(
+      `DAI Balance after adding Liquidity: ${ethers.utils.formatUnits(
+        DAIBalanceAfter.toString()
+      )}`
+    );
+
+    assert.isBelow(
+      WETHBalanceAfter,
+      WETHBalanceBefore,
+      "WETH not added to liquidity"
+    );
+    assert.isBelow(
+      DAIBalanceAfter,
+      DAIBalanceBefore,
+      "DAI not added to liquidity"
+    );
+  });
+
+  // it("should remove liquidity", async () => {});
+});
+
+// // Remove Liquidity
+// describe("Uniswap V2 Flash Swap", function () {
+//   let TestFlashContract;
+
+//   beforeEaach(async () => {
+//     TestFlashFactory = await ethers.getContractFactory("UniswapV2FlashSwap");
+
+//     TestFlashContract = await TestFlashFactory.deploy();
+//     await TestFlashFactory.deployed();
+//   });
+//   it("should add liquidity", async () => {});
+
+//   it("should remove liquidity", async () => {});
+// });

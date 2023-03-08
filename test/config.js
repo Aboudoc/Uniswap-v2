@@ -14,6 +14,7 @@ const USDC_WHALE = process.env.USDC_WHALE;
 const USDT_WHALE = process.env.USDT_WHALE;
 const WETH_WHALE = process.env.WETH_WHALE;
 const WBTC_WHALE = process.env.WBTC_WHALE;
+const WETHDAI_WHALE = process.env.WETHDAI_WHALE;
 
 module.exports = {
   DAI,
@@ -28,4 +29,5 @@ module.exports = {
   USDT_WHALE,
   WETH_WHALE,
   WBTC_WHALE,
+  WETHDAI_WHALE,
 };
