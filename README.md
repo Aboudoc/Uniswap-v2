@@ -169,7 +169,7 @@ This contract introduces 2 functions to swap tokens on Uniswap V2
 
 1. Transfer `amountInMax`from `msg.sender`
 2. Approve `amountInMax` to `router`
-3. Set the `path``
+3. Set the `path`
 4. Call `swapTokensForExactTokens` on IUniswapV2Router and store amount of WETH spent by Uniswap in amounts (uint[])
 5. Refund excess WETH to `msg.sender`. Amount of WETH spent by Uniswap is stored in amounts[0]
 
