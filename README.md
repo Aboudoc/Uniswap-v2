@@ -245,7 +245,52 @@ This function removes liquidity from the Uniswap WETH - DAI pool.
 
 Tokens in the pool can be borrowed as long as they are repaid in the same transaction plus fee on borrow.
 
-This is called flash swap.
+This is called **flash swap**.
+
+The contract inherit from `IUniswapV2Callee`
+
+### State Variables
+
+1. Address of tokens and the address of the factory
+2. Set WETH and factory interface then declare pair (IUniswapV2Pair)
+
+### Constructor
+
+1. Call getPair() on factory and store the result inside pair variable (which is a IUniswapV2Pair interface)
+
+### Funuction flashSwap
+
+1. Prepare data of bytes to send. This can be any data, as long as it is not empty Uniswap will trigger a flash swap. For this example, we encode WETH and msg.sender.
+2. Call `swap()`on pair. Find below `swap()` from `IUniswapV2Pair`
+
+```js
+function swap(
+    uint amount0Out,
+    uint amount1Out,
+    address to,
+    bytes calldata data
+) external;
+
+```
+
+amount0Out: Amount of token0 to withdraw from the pool => 0
+amount1Out:Amount of token1 to withdraw from the pool => wethAmount
+to: Recipient of tokens in the pool => address(this)
+data: Data to send to uniswapV2Call => data
+
+### Function uniswapV2Call
+
+This function is called by the DAI/WETH pair contract after we called pair.swap.
+
+Immediately before the pool calls this function, the amount of tokens that we requested to borrow is sent. Inside this function, we write our custom code and then repay the borrowed amount plus some fees.
+
+1. Require that `msg.sender` is pair. Only pair contract should be able to call this function.
+2. Require `sender` is this contract. Initiator of the flash swap should be this contract.
+3. Decode `data`. Inside flashSwap we've encoded WETH and msg.sender.
+4. Once the data is decoded, we would write our custom code here. We only required that tokenBorrow == WETH for this example
+5. Calculate total amount to repay
+6. Transfer fee amount of WETH from caller (about 0.3% fee, +1 to round up)
+7. Repay WETH to pair, amount borrowed plus fee
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
