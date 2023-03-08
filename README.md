@@ -273,10 +273,13 @@ function swap(
 
 ```
 
-amount0Out: Amount of token0 to withdraw from the pool => 0
-amount1Out:Amount of token1 to withdraw from the pool => wethAmount
-to: Recipient of tokens in the pool => address(this)
-data: Data to send to uniswapV2Call => data
+`amount0Out`: Amount of token0 to withdraw from the pool => 0
+
+`amount1Out`:Amount of token1 to withdraw from the pool => wethAmount
+
+`to`: Recipient of tokens in the pool => address(this)
+
+`data`: Data to send to uniswapV2Call => data
 
 ### Function uniswapV2Call
 
