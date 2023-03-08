@@ -234,9 +234,15 @@ This function removes liquidity from the Uniswap WETH - DAI pool.
 
 ## Uniswap V2 Flash Swap
 
+Tokens in the pool can be borrowed as long as they are repaid in the same transaction plus fee on borrow.
+
+This is called flash swap.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Forking mainnet
+
+When we fork 🍴 the mainnet, we have the current state of the blockchain running locally on our system, including all contracts deployed on it and all transactions performed on it.
 
 1. Setup hardhat.config
 2. Find a whale on etherscan
@@ -253,23 +259,37 @@ This function removes liquidity from the Uniswap WETH - DAI pool.
   }
 ```
 
+Note: Replace the `${}` component of the URL with your personal [Alchemy](https://www.alchemy.com/) API key.
+
+`.config`
+
+```js
+const DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
+const DAI_WHALE = process.env.DAI_WHALE;
+
+module.exports = {
+  DAI,
+  DAI_WHALE,
+};
+```
+
 `.env`
 
 ```sh
 ALCHEMY_API_KEY=...
 ```
 
-`terminal1`
+`Terminal 1`
+
+```sh
+npx hardhat test --network localhost
+```
+
+`Terminal 2`
 
 ```sh
 ALCHEMY_API_KEY=...
 npx hardhat node --fork https://eth-mainnet.g.alchemy.com/v2/$ALCHEMY_API_KEY
-```
-
-`terminal2`
-
-```sh
-npx hardhat test --network localhost
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
