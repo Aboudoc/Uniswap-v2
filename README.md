@@ -199,7 +199,7 @@ This function will swap `minimum` DAI to obtain a `specific amount` of CRV. It w
 
 1. Transfer `amountInMax`from `msg.sender`
 2. Approve `amountInMax` to `router`
-3. Setup the swapping `path``
+3. Setup the swapping `path`
 4. Call `swapTokensForExactTokens` on IUniswapV2Router and store amount of DAI spent by Uniswap in amounts (uint[])
 5. Refund DAI to `msg.sender` if not all of DAI was spent. Amount of DAI spent by Uniswap is stored in amounts[0]
 
@@ -215,20 +215,29 @@ Remove liquidity to withdraw your tokens and claim your trading fees.
 
 ### State variables
 
-1. Address of tokens and the addresses of the router and the factory
-2. Set interfaces for tokens and pair, router and factory
+1. Address of tokens and the addresses of the router and the factory. Declare pair variable
+2. Set interfaces for tokens, router and factory
 
 ### Constructor
 
-1. Setup pair (IERC20) by calling getPair on factory
+1. Setup pair (IERC20) by calling getPair() on factory
 
-### Function
+### Function addLiquidity
 
 This function adds liquidity to the Uniswap WETH - DAI pool.
 
-### Function
+1. Transfer `wethAmountDesired` and `daiAmountDesired` from `msg.sender`
+2. Approve `amountwethAmountDesired` and `daiAmountDesired` to `router`
+3. Call `addLiqiuidity()` on `router` and store `wethAmount`, `daiAmount` and `liquidity` returned from the function call
+4. Refund to msg.sender, excess WETH and DAI that were not added to liquidity
+
+### Function removeLiquidity
 
 This function removes liquidity from the Uniswap WETH - DAI pool.
+
+1. Transfer `liquidity` from `msg.sender`
+2. Approve `liquidity` to `router`
+3. Call `removeLiqiuidity()` on `router`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
