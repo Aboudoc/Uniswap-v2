@@ -149,7 +149,7 @@ You can find a deep overview of CPAMM in [this repo](https://github.com/Aboudoc/
 ## Test
 
 <div>
- <img src="test.png" alt="Test">
+ <img src="test.png" alt="Math">
 </div>
 
 ## Uniswap V2 Single Hop Swap
