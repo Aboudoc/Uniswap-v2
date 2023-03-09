@@ -367,10 +367,8 @@ describe("Uniswap V2 Flash Swap", function () {
     console.log(
       "----------------------------FLASH SWAP----------------------------"
     );
-
-    await TestFlashContract.connect(impersonateSigner).flashSwap(
-      ethers.utils.parseUnits("100")
-    );
+    const amountFlash = ethers.utils.parseUnits("100");
+    await TestFlashContract.connect(impersonateSigner).flashSwap(amountFlash);
 
     const WETHBalanceAfter = await WETHContract.balanceOf(
       impersonateSigner.address
@@ -381,5 +379,6 @@ describe("Uniswap V2 Flash Swap", function () {
         WETHBalanceAfter.toString()
       )}`
     );
+    assert(WETHBalanceAfter < WETHBalanceBefore);
   });
 });
