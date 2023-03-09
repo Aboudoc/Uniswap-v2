@@ -146,6 +146,12 @@ If you need testnet funds, use the [Alchemy testnet faucet](https://goerlifaucet
 Uniswap V2 is a Constant product AMM (automated market maker) <=> a decentralized exchange where 2 tokens are traded.
 You can find a deep overview of CPAMM in [this repo](https://github.com/Aboudoc/Constant-Product-AMM)
 
+## Test
+
+<div>
+ <img src="test.png" alt="Test">
+</div>
+
 ## Uniswap V2 Single Hop Swap
 
 This contract introduces 2 functions to swap tokens on Uniswap V2
@@ -290,7 +296,7 @@ Immediately before the pool calls this function, the amount of tokens that we re
 1. Require that `msg.sender` is pair. Only pair contract should be able to call this function.
 2. Require `sender` is this contract. Initiator of the flash swap should be this contract.
 3. Decode `data`. Inside flashSwap we've encoded WETH and msg.sender.
-4. Once the data is decoded, we would write our custom code here. We only required that tokenBorrow == WETH for this example
+4. Once the data is decoded, we would write our custom code here (arbitrage). We only emitted events for this example
 5. Calculate total amount to repay
 6. Transfer fee amount of WETH from caller (about 0.3% fee, +1 to round up)
 7. Repay WETH to pair, amount borrowed plus fee

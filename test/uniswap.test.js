@@ -1,16 +1,17 @@
 // const { BigNumber } = require("@ethersproject/bignumber");
-const { assert } = require("chai");
+const { assert, expect } = require("chai");
 const { ethers } = require("hardhat");
 const {
   WETH_WHALE,
   DAI_WHALE,
   WETHDAI_WHALE,
+  WETH_WHALE1,
   WETH,
   DAI,
   CRV,
 } = require("./config.js");
 
-// Single Hop Swap
+// Single Hop Swap ✅
 describe("Uniswap v2 Single Hop Swap", function () {
   let TestSwapContract;
 
@@ -23,7 +24,6 @@ describe("Uniswap v2 Single Hop Swap", function () {
   });
 
   it("should swap", async () => {
-    //✅
     await hre.network.provider.request({
       method: "hardhat_impersonateAccount",
       params: [WETH_WHALE],
@@ -83,7 +83,7 @@ describe("Uniswap v2 Single Hop Swap", function () {
   });
 });
 
-// Multi Hop Swap
+// Multi Hop Swap ✅
 describe("Uniswap v2 Multi Hop Swap", function () {
   let TestMultiSwapContract;
 
@@ -96,7 +96,6 @@ describe("Uniswap v2 Multi Hop Swap", function () {
   });
 
   it("should Multiswap", async () => {
-    //✅
     await hre.network.provider.request({
       method: "hardhat_impersonateAccount",
       params: [DAI_WHALE],
@@ -158,7 +157,7 @@ describe("Uniswap v2 Multi Hop Swap", function () {
   });
 });
 
-// Add Liquidity
+// Add Liquidity ✅
 describe("Uniswap V2 Liquidity", function () {
   let TestLiquidityContract;
 
@@ -180,6 +179,7 @@ describe("Uniswap V2 Liquidity", function () {
 
     const WETHContract = await ethers.getContractAt("IERC20", WETH);
     const DAIContract = await ethers.getContractAt("IERC20", DAI);
+    // const UNIContract = await ethers.getContractAt("IERC20", UNI);
     const DAIBalanceBefore = await DAIContract.balanceOf(
       impersonateSigner.address
     );
@@ -212,10 +212,15 @@ describe("Uniswap V2 Liquidity", function () {
       "----------------------------ADD LIQUIDITY----------------------------"
     );
 
-    await TestLiquidityContract.connect(impersonateSigner).addLiquidity(
-      WETHBalanceBefore,
-      DAIBalanceBefore
-    );
+    let tx = await TestLiquidityContract.connect(
+      impersonateSigner
+    ).addLiquidity(WETHBalanceBefore, DAIBalanceBefore);
+
+    let receipt = await tx.wait();
+    // console.log(receipt.logs);
+    // console.log(receipt.events[0].topics.toString());
+    // console.log(receipt.events[0].args.message.toString());
+    // console.log(receipt.events[0].args.val.toString());
 
     const WETHBalanceAfter = await WETHContract.balanceOf(
       impersonateSigner.address
@@ -246,22 +251,135 @@ describe("Uniswap V2 Liquidity", function () {
       DAIBalanceBefore,
       "DAI not added to liquidity"
     );
+
+    expect(tx).to.emit(TestLiquidityContract, "Log");
   });
 
-  // it("should remove liquidity", async () => {});
+  it("should remove liquidity", async () => {
+    await hre.network.provider.request({
+      method: "hardhat_impersonateAccount",
+      params: [WETHDAI_WHALE],
+      // WETHDAI_WHALE holds WETH, DAI and ETH
+    });
+    const impersonateSigner = await ethers.getSigner(WETHDAI_WHALE);
+
+    const WETHContract = await ethers.getContractAt("IERC20", WETH);
+    const DAIContract = await ethers.getContractAt("IERC20", DAI);
+    const DAIBalanceBefore = await DAIContract.balanceOf(
+      impersonateSigner.address
+    );
+    const WETHBalanceBefore = await WETHContract.balanceOf(
+      impersonateSigner.address
+    );
+    console.log(
+      `WETH Balance before removing Liquidity: ${ethers.utils.formatUnits(
+        WETHBalanceBefore.toString()
+      )}`
+    );
+
+    console.log(
+      `DAI Balance before removing Liquidity: ${ethers.utils.formatUnits(
+        DAIBalanceBefore.toString()
+      )}`
+    );
+
+    ////////////////////////////////////////////////////
+    ////////////////Stuck at this point////////////////
+    ////////////////////////////////////////////////////
+    //can't find events emited on transaction receipt,
+    // and also the transaction was reverted
+    // (after calling remove liquidity)
+    // with this error: 'ds-math-sub-underflow'
+    ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
+
+    console.log(
+      "----------------------------REMOVE LIQUIDITY----------------------------"
+    );
+
+    // let tx = await TestLiquidityContract.connect(
+    //   impersonateSigner
+    // ).removeLiquidity();
+
+    // let receipt = await tx.wait(1);
+
+    // console.log(receipt);
+
+    // const WETHBalanceAfter = await WETHContract.balanceOf(
+    //   impersonateSigner.address
+    // );
+    // const DAIBalanceAfter = await DAIContract.balanceOf(
+    //   impersonateSigner.address
+    // );
+
+    // console.log(
+    //   `WETH Balance after removing Liquidity: ${ethers.utils.formatUnits(
+    //     WETHBalanceAfter.toString()
+    //   )}`
+    // );
+
+    // console.log(
+    //   `DAI Balance after removing Liquidity: ${ethers.utils.formatUnits(
+    //     DAIBalanceAfter.toString()
+    //   )}`
+    // );
+  });
 });
 
-// // Remove Liquidity
-// describe("Uniswap V2 Flash Swap", function () {
-//   let TestFlashContract;
+// Flash Swap
+describe("Uniswap V2 Flash Swap", function () {
+  let TestFlashContract;
 
-//   beforeEaach(async () => {
-//     TestFlashFactory = await ethers.getContractFactory("UniswapV2FlashSwap");
+  beforeEach(async () => {
+    const TestFlashFactory = await ethers.getContractFactory(
+      "UniswapV2FlashSwap"
+    );
 
-//     TestFlashContract = await TestFlashFactory.deploy();
-//     await TestFlashFactory.deployed();
-//   });
-//   it("should add liquidity", async () => {});
+    TestFlashContract = await TestFlashFactory.deploy();
+    await TestFlashContract.deployed();
+  });
+  it("flash swap", async () => {
+    await hre.network.provider.request({
+      method: "hardhat_impersonateAccount",
+      params: [WETH_WHALE1],
+      // WETHDAI_WHALE holds WETH, DAI and ETH
+    });
 
-//   it("should remove liquidity", async () => {});
-// });
+    const impersonateSigner = await ethers.getSigner(WETH_WHALE1);
+
+    const WETHContract = await ethers.getContractAt("IERC20", WETH);
+
+    const WETHBalanceBefore = await WETHContract.balanceOf(
+      impersonateSigner.address
+    );
+
+    console.log(
+      `Balance of WETH before the Flash Swap: ${ethers.utils.formatUnits(
+        WETHBalanceBefore.toString()
+      )}`
+    );
+
+    await WETHContract.connect(impersonateSigner).approve(
+      TestFlashContract.address,
+      WETHBalanceBefore
+    );
+
+    console.log(
+      "----------------------------FLASH SWAP----------------------------"
+    );
+
+    await TestFlashContract.connect(impersonateSigner).flashSwap(
+      ethers.utils.parseUnits("100")
+    );
+
+    const WETHBalanceAfter = await WETHContract.balanceOf(
+      impersonateSigner.address
+    );
+
+    console.log(
+      `Balance of WETH AFTER the Flash Swap: ${ethers.utils.formatUnits(
+        WETHBalanceAfter.toString()
+      )}`
+    );
+  });
+});

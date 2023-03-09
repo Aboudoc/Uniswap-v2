@@ -7,6 +7,8 @@ import "./IUniswapV2Callee.sol";
 import "./IUniswapV2Pair.sol";
 
 contract UniswapV2FlashSwap is IUniswapV2Callee {
+    event Log(string message, uint val);
+
     address private constant WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
     address private constant DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
 
@@ -40,10 +42,13 @@ contract UniswapV2FlashSwap is IUniswapV2Callee {
             data,
             (address, address)
         );
-
-        require(tokenBorrow == WETH, "not weth");
-
         uint fee = ((amount1 * 3) / 997) + 1;
+
+        // Arbitrage...
+        emit Log("amount", amount1);
+        emit Log("fee", fee);
+        emit Log("amount to repay", fee + amount1);
+
         weth.transferFrom(caller, address(this), amount1 + fee);
         weth.transfer(address(pair), amount1 + fee);
     }

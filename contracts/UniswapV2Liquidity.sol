@@ -6,6 +6,8 @@ import "./IUniswapV2Router.sol";
 import "./IERC20.sol";
 
 contract UniswapV2Liquidity {
+    event Log(string message, uint val);
+
     address private constant UNISWAP_V2_ROUTER =
         0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
 
@@ -46,6 +48,10 @@ contract UniswapV2Liquidity {
             msg.sender,
             block.timestamp
         );
+        // Trying to get liquidity amount returned from the function call to fix issues met when testing
+        // emit Log("wethAmount", wethAmount);
+        // emit Log("daiAmount", daiAmount);
+        emit Log("liquidity", liquidity);
 
         if (wethAmount < wethAmountDesired) {
             weth.transfer(msg.sender, wethAmountDesired - wethAmount);
@@ -56,11 +62,14 @@ contract UniswapV2Liquidity {
         }
     }
 
-    function removeLiquidity(uint liquidity) external {
+    // Trying to get liquidity
+    function removeLiquidity() external {
+        uint liquidity = IERC20(pair).balanceOf(msg.sender);
+        require(liquidity > 0, "liquidity = 0");
         pair.transferFrom(msg.sender, address(this), liquidity);
         pair.approve(address(router), liquidity);
 
-        router.removeLiquidity(
+        (uint wethAmount, uint daiAmount) = router.removeLiquidity(
             WETH,
             DAI,
             liquidity,
@@ -69,5 +78,23 @@ contract UniswapV2Liquidity {
             msg.sender,
             block.timestamp
         );
+
+        emit Log("wethAmount", wethAmount);
+        emit Log("daiAmount", daiAmount);
     }
+
+    // function removeLiquidity(uint liquidity) external {
+    //     pair.transferFrom(msg.sender, address(this), liquidity);
+    //     pair.approve(address(router), liquidity);
+
+    //     router.removeLiquidity(
+    //         WETH,
+    //         DAI,
+    //         liquidity,
+    //         1,
+    //         1,
+    //         msg.sender,
+    //         block.timestamp
+    //     );
+    // }
 }
