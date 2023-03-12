@@ -48,14 +48,35 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#Uniswap-v2">Constant Product AMM</a></li>
-    <li><a href="#Time-Weighted-Average-Price">Time Weighted Average Price</a></li>
-    <li><a href="#Uniswap-V2-Price-Oracle">Uniswap V2 Price Oracle</a></li>
-    <li><a href="#Uniswap-v2-Spot-Price-Examples">Constant Product AMM Spot Price Examples</a></li>
-    <li><a href="#Uniswap-V3-Price-Oracle">Uniswap V3 Price Oracle</a></li>
-    <li><a href="#Geometric-Mean">Geometric Mean</a></li>
-    <li><a href="#Uniswap-V3-TWAP-and-Geometric-Mean">Uniswap V3 TWAP and Geometric Mean</a></li>
-    <li><a href="#Uniswap-V3-TWAP-Inverse-Price">Uniswap V3 TWAP Inverse Price</a></li>
+    <li><a href="#Constant-Product-AMM">Constant Product AMM</a></li>
+    <li><a href="#Test">Test</a></li>
+    <li><a href="#Uniswap-V2-Single-Hop-Swap">Uniswap V2 Single Hop Swap</a></li>
+    <ul>
+        <li><a href="#State-variables">State variables</a></li>
+        <li><a href="#Function-swapSingleHopExactAmountIn">Function swapSingleHopExactAmountIn</a></li>
+        <li><a href="#Function-swapSingleHopExactAmountOut">Function swapSingleHopExactAmountOut</a></li>
+      </ul>
+      <li><a href="#Uniswap-V2-Multi-Hop-Swap">Uniswap V2 Multi Hop Swap</a></li>
+    <ul>
+        <li><a href="#State-variables">State variables</a></li>
+        <li><a href="#Function-swapMultiHopExactAmountIn">Function swapMultiHopExactAmountIn</a></li>
+        <li><a href="#Function-swapMultiHopExactAmountOut">Function swapMultiHopExactAmountOut</a></li>
+      </ul>
+    <li><a href="#Uniswap-V2-Add-and-Remove-Liquidity">Uniswap V2 Add and Remove Liquidity</a></li>
+    <ul>
+        <li><a href="#State-variables">State variables</a></li>
+        <li><a href="#Constructor">Constructor</a></li>
+        <li><a href="#Function-addLiquidity">Function addLiquidity</a></li>
+        <li><a href="#Function-removeLiquidiquiity">Function removeLiquidiquiity</a></li>
+      </ul>
+    <li><a href="#Uniswap-V2-Flash-Swap">Uniswap V2 Flash Swap</a></li>
+    <ul>
+        <li><a href="#State-variables">State variables</a></li>
+        <li><a href="#Constructor">Constructor</a></li>
+        <li><a href="#Function-flashSwap">Function flashSwap</a></li>
+      </ul>
+    <li><a href="#Forking-mainnet">Forking mainnet</a></li>
+    <li><a href="#Note">Note</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
