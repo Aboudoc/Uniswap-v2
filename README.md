@@ -185,13 +185,13 @@ if the price changes either down or up, then the LP will experience some loss
  <img src="images/maths00.png" alt="Test">
 </div>
 
-Let's see how to derive this equation. Find x and y
+Let's see how to derive this equation. Find `x` and `y`
 
 <div>
  <img src="images/maths01.png" alt="Test">
 </div>
 
-We solved y and x in terms of L and P. We are now ready to solve IL(d)
+We solved `y` and `x` in terms of `L` and `P`. We are now ready to solve `IL(d)`
 
 <div>
  <img src="images/maths02.png" alt="Test">
