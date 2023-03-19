@@ -49,6 +49,10 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#Constant-Product-AMM">Constant Product AMM</a></li>
+    <li><a href="#Impermanent-Loss-on-Uniswap-v2">Impermanent Loss on Uniswap v2</a></li>
+    <ul>
+        <li><a href="#How-to-calculate-impermanent-loss">How to calculate impermanent loss</a></li>
+    <ul>
     <li><a href="#Test">Test</a></li>
     <li><a href="#Uniswap-V2-Single-Hop-Swap">Uniswap V2 Single Hop Swap</a></li>
     <ul>
@@ -167,6 +171,38 @@ If you need testnet funds, use the [Alchemy testnet faucet](https://goerlifaucet
 Uniswap V2 is a Constant product AMM (automated market maker) <=> a decentralized exchange where 2 tokens are traded.
 You can find a deep overview of CPAMM in [this repo](https://github.com/Aboudoc/Constant-Product-AMM)
 
+## Impermanent Loss on Uniswap v2
+
+How to calculate Impermanent Loss in a constant product AMM?
+
+If the price does not change at all, the d = 1 and there is no loss in providing liquidity to CPAMM
+
+if the price changes either down or up, then the LP will experience some loss
+
+### How to calculate impermanent loss
+
+<div>
+ <img src="images/maths00.png" alt="Test">
+</div>
+
+Let's see how to derive this equation
+
+<div>
+ <img src="images/maths01.png" alt="Test">
+</div>
+
+We solved y and x in terms of L and P. Let's solve IL(d)
+
+<div>
+ <img src="images/maths02.png" alt="Test">
+</div>
+
+<div>
+ <img src="images/maths03.png" alt="Test">
+</div>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## Test
 
 <div>
@@ -190,7 +226,7 @@ This contract introduces 2 functions to swap tokens on Uniswap V2
 1. Transfer `amountIn` from `msg.sender`
 2. Approve `amountIn` to `router`
 3. Set the `path`
-4. Call `swapExactTokensFor Tokens` on IUniswapV2Router
+4. Call `swapExactTokensForTokens` on IUniswapV2Router
 
 ### Function swapSingleHopExactAmountOut
 
@@ -480,7 +516,3 @@ Project Link: [https://github.com/Aboudoc/Uniswap-v2.git](https://github.com/Abo
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com
-
-```
-
-```
