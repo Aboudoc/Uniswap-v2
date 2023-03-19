@@ -185,20 +185,30 @@ if the price changes either down or up, then the LP will experience some loss
  <img src="images/maths00.png" alt="Test">
 </div>
 
-Let's see how to derive this equation
+Let's see how to derive this equation. Find x and y
 
 <div>
  <img src="images/maths01.png" alt="Test">
 </div>
 
-We solved y and x in terms of L and P. Let's solve IL(d)
+We solved y and x in terms of L and P. We are now ready to solve IL(d)
 
 <div>
  <img src="images/maths02.png" alt="Test">
 </div>
 
+Le's find out what are `V1` and `Vhold` in terms of token `y`.
+
+Below we multiplied `x1` by `P1` to get the price of `x1` in term of `y`
+
 <div>
- <img src="images/maths03.png" alt="Test">
+ <img src="images/maths03bis.png" alt="Test">
+</div>
+
+We are now ready to solve the equation of `IL(d)`
+
+<div>
+ <img src="images/maths04.png" alt="Test">
 </div>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
