@@ -278,6 +278,28 @@ This function will swap `minimum` DAI to obtain a `specific amount` of CRV. It w
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Uniswap V2 Liquidity Delta
+
+When we add or remove tokens from a Uniswap V2 pool, the liquidity changes.
+
+Let's see how to derive the liquidity delta
+
+As always, we start with the definition:
+
+<div>
+ <img src="images/maths05.png" alt="Test">
+</div>
+
+<div>
+ <img src="images/maths06.png" alt="Test">
+</div>
+
+<div>
+ <img src="images/maths07.png" alt="Test">
+</div>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## Uniswap V2 Add and Remove Liquidity
 
 Deposit your tokens into an Uniswap V2 pool to earn trading fees.
