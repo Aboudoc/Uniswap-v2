@@ -290,9 +290,13 @@ As always, we start with the definition:
  <img src="images/maths05.png" alt="Test">
 </div>
 
+Preliminary math to derive these equations (green square)
+
 <div>
  <img src="images/maths06.png" alt="Test">
 </div>
+
+Now we have the math needed, let's now derive the equation for the liquidity delta
 
 <div>
  <img src="images/maths07.png" alt="Test">
